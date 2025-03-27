@@ -1,6 +1,6 @@
 import Game from "./Game";
 import { WebSocket } from "ws";
-import { INIT_GAME, MAKE_MOVE } from "./messages";
+import { GAME_OVER, INIT_GAME, MAKE_MOVE } from "./messages";
 
 class GameManager {
   private games: Game[];
@@ -31,13 +31,39 @@ class GameManager {
         if (!this.pendingUser) {
           this.pendingUser = ws;
         } else {
-          const newGame = new Game(this.pendingUser, ws);
+          const toss = Math.floor(Math.random() * 2 + 1);
+          let newGame;
+          if (toss == 1) {
+            if (message.payload.timer) {
+              newGame = new Game(this.pendingUser, ws, message.payload.timer);
+            } else {
+              newGame = new Game(
+                this.pendingUser,
+                ws,
+                message.payload.timer,
+                message.payload.timer2
+              );
+            }
+          } else {
+            if (message.payload.timer) {
+              newGame = new Game(ws, this.pendingUser, message.payload.timer);
+            } else {
+              newGame = new Game(
+                ws,
+                this.pendingUser,
+                message.payload.timer,
+                message.payload.timer2
+              );
+            }
+          }
           this.games.push(newGame);
           this.pendingUser = null;
         }
       }
       if (message.type === MAKE_MOVE) {
-        const game = this.games.find((g) => g.gameId === message.gameId);
+        const game = this.games.find(
+          (g) => g.gameId.toString() === message.payload.gameId.toString()
+        );
         if (!game) {
           console.log("The game not found");
           return;
