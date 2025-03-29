@@ -6,15 +6,17 @@ import { ExtendedWebSocket } from ".";
 import { Redis } from "ioredis";
 
 class GameManager {
-  private games: Game[];
+  private games: Map<string, Game>;
   private pendingUser: Map<string, WebSocket>;
   private users: WebSocket[];
   private redis: Redis;
+  private numberOfCurrentGames = 0;
+  private totalNumberOfUser = 0;
 
   //TODO: Try to store all this in redis
 
   constructor(redis: Redis) {
-    this.games = [];
+    this.games = new Map();
     this.pendingUser = new Map<string, WebSocket>();
     this.users = [];
     this.redis = redis;
@@ -35,16 +37,47 @@ class GameManager {
     return pendingUser;
   }
 
-  addUser(ws: WebSocket) {
+  private async addUsersToRedis(userId: any) {
+    const data = {
+      data: JSON.stringify(userId),
+    };
+    await this.redis.hset(`users:${userId}`, data);
+  }
+
+  private async deleteUser(userId: any) {
+    await this.redis.hdel(`users:${userId}`, "data");
+  }
+
+  private async addGameToRedis(game: Game) {
+    this.numberOfCurrentGames++;
+    const gameObj = {
+      game: JSON.stringify(game),
+    };
+    await this.redis.hset(`game:${game.gameId}`, gameObj);
+  }
+  private async getGame(gameId: string): Promise<Game | null> {
+    const game = await this.redis.hget(`game:${gameId}`, "game");
+    if (!game) {
+      return null;
+    }
+    return JSON.parse(game);
+  }
+
+  async addUser(ws: ExtendedWebSocket) {
     this.users.push(ws);
-    this.handler(ws as ExtendedWebSocket);
+    this.handler(ws);
+    await this.addUsersToRedis(ws.id);
+    this.totalNumberOfUser++;
   }
 
-  removeUser(ws: WebSocket) {
+  async removeUser(ws: ExtendedWebSocket) {
     this.users = this.users.filter((user) => user !== ws);
+    this.pendingUser.delete(ws.id);
+    await this.deleteUser(ws.id);
+    this.totalNumberOfUser--;
   }
 
-  async handler(ws: ExtendedWebSocket) {
+  handler(ws: ExtendedWebSocket) {
     ws.on("message", async (data) => {
       const message = JSON.parse(data.toString());
 
@@ -56,15 +89,26 @@ class GameManager {
       } else {
         const toss = Math.floor(Math.random() * 2 + 1);
         if (message.type === INIT_GAME) {
+          // Checking if the pending user and requested user are same and
+          // if they are then end the function there itself
+
+          const isSameUser = this.pendingUser.has(ws.id);
+          if (isSameUser) {
+            return;
+          }
+
           const pendingUserId = await this.getPendingUser();
           if (!pendingUserId) {
             return;
           }
-          const userWs = this.pendingUser.get(pendingUserId);
+          const userWs = this.pendingUser.get(
+            pendingUserId
+          ) as ExtendedWebSocket;
           if (!userWs) {
             console.log("There's no pending user with the following user id");
             return;
           }
+
           let newGame;
           if (toss == 1) {
             if (message.payload.timer) {
@@ -89,13 +133,13 @@ class GameManager {
               );
             }
           }
-          this.games.push(newGame);
+          this.pendingUser = new Map();
+          this.games.set(newGame.gameId, newGame);
+          this.addGameToRedis(newGame);
         }
       }
       if (message.type === MAKE_MOVE) {
-        const game = this.games.find(
-          (g) => g.gameId.toString() === message.payload.gameId.toString()
-        );
+        const game = this.games.get(message.payload.gameId.toString());
         if (!game) {
           console.log("The game not found");
           return;
