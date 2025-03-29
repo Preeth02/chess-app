@@ -8,6 +8,7 @@ import {
   MAKE_MOVE,
   TIME_IN_MIN,
 } from "./messages";
+import Redis from "ioredis";
 
 type gameStatus = "COMPLETED" | "ABANDONED" | "PLAYER_EXIT";
 type gameResult =
@@ -21,6 +22,32 @@ type gameResult =
   | "White left the game • Black is victorious"
   | "Black left the game • White is victorious";
 
+type promotionPieceType = "q" | "r" | "b" | "n";
+
+interface myMove extends Move {
+  promotePiece: promotionPieceType;
+}
+
+export function isPromoting(chess: Chess, move: Move) {
+  if (!move.from) {
+    return;
+  }
+  const piece = chess.get(move.from);
+  if (piece?.type !== "p") {
+    return;
+  }
+  if (piece.color !== chess.turn()) {
+    return;
+  }
+  if (!["1", "8"].some((pos) => move.to.endsWith(pos))) {
+    return;
+  }
+  return chess
+    .moves({ square: move.from, verbose: true })
+    .map((move) => move.to)
+    .includes(move.to);
+}
+
 class Game {
   public gameId: string;
   public player1: WebSocket;
@@ -32,10 +59,12 @@ class Game {
   private createdOn = new Date();
   private lastMoveTime = new Date();
   private result: gameResult | null = null;
+  private redis: Redis;
 
   constructor(
     player1: WebSocket,
     player2: WebSocket,
+    redis: Redis,
     player1Timer: number,
     player2Timer?: number
   ) {
@@ -44,6 +73,7 @@ class Game {
     this.gameId = randomUUID();
     this.board = new Chess();
     this.lastMoveTime = new Date();
+    this.redis = redis;
 
     if (player1Timer) {
       this.player1Timer = this.player2Timer = player1Timer * TIME_IN_MIN;
@@ -76,7 +106,7 @@ class Game {
       })
     );
   }
-  makeMove(ws: WebSocket, move: Move) {
+  makeMove(ws: WebSocket, move: myMove) {
     if (this.moveCounter % 2 === 0 && ws !== this.player1) {
       return;
     }
@@ -96,7 +126,13 @@ class Game {
     }
 
     try {
-      this.board.move(move);
+      if (isPromoting(this.board, move)) {
+        this.board.move({
+          from: move.from,
+          to: move.to,
+          promotion: move.promotePiece || "q",
+        });
+      } else this.board.move(move);
     } catch (error) {
       console.log(error);
       return;

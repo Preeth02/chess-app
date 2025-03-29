@@ -112,7 +112,7 @@ class GameManager {
           let newGame;
           if (toss == 1) {
             if (message.payload.timer) {
-              newGame = new Game(userWs, ws, message.payload.timer);
+              newGame = new Game(userWs, ws, this.redis, message.payload.timer);
             } else {
               newGame = new Game(
                 userWs,
@@ -123,11 +123,12 @@ class GameManager {
             }
           } else {
             if (message.payload.timer) {
-              newGame = new Game(ws, userWs, message.payload.timer);
+              newGame = new Game(ws, userWs, this.redis, message.payload.timer);
             } else {
               newGame = new Game(
                 ws,
                 userWs,
+                this.redis,
                 message.payload.timer,
                 message.payload.timer2
               );
