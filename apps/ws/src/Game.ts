@@ -106,7 +106,29 @@ class Game {
       })
     );
   }
-  makeMove(ws: WebSocket, move: myMove) {
+
+  private async addMoveToRedis(move: myMove) {
+    const obj = {
+      move: move,
+      player1Timer: this.player1Timer,
+      player2Timer: this.player2Timer,
+    };
+    try {
+      this.redis.xadd(
+        `moves-list-${this.gameId}`,
+        "*",
+        "move",
+        JSON.stringify(obj)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  private async getAllMovesFromRedis() {
+    return await this.redis.xrange(`moves-list-${this.gameId}}`, "-", "+");
+  }
+
+  async makeMove(ws: WebSocket, move: myMove) {
     if (this.moveCounter % 2 === 0 && ws !== this.player1) {
       return;
     }
@@ -152,14 +174,16 @@ class Game {
 
       return;
     }
+    this.addMoveToRedis(move);
 
     if (this.board.isGameOver()) {
       if (this.board.isCheckmate()) {
         const result = this.board.turn() === "w";
         this.endGame(
           "COMPLETED",
-          result ? "Checkmate • White wins" : "Checkmate • Black wins"
+          !result ? "Checkmate • White wins" : "Checkmate • Black wins"
         );
+        console.log("Color wins: ", this.board.turn());
       } else if (this.board.isDraw()) {
         if (this.board.isStalemate()) {
           this.endGame("COMPLETED", "Stalemate");
@@ -191,6 +215,8 @@ class Game {
       );
     }
     this.moveCounter++;
+    const moves = await this.getAllMovesFromRedis();
+    console.log(moves);
   }
 
   endGame(status: gameStatus, result: gameResult) {

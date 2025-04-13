@@ -25,11 +25,20 @@ class GameManager {
   // Functions to interact with redis:
   private async addPendingUser(userId: string) {
     //   console.log("User object: ", user.id);
-    await this.redis.rpush("pending-users", userId);
+    try {
+      await this.redis.rpush("pending-users", userId);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private async getPendingUser(): Promise<string | null> {
-    const pendingUser = await this.redis.lpop("pending-users");
+    let pendingUser;
+    try {
+      pendingUser = await this.redis.lpop("pending-users");
+    } catch (error) {
+      console.log(error);
+    }
     if (!pendingUser) {
       console.log("No pending user in the DB");
       return null;
@@ -41,11 +50,19 @@ class GameManager {
     const data = {
       data: JSON.stringify(userId),
     };
-    await this.redis.hset(`users:${userId}`, data);
+    try {
+      await this.redis.hset(`users:${userId}`, data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private async deleteUser(userId: any) {
-    await this.redis.hdel(`users:${userId}`, "data");
+    try {
+      await this.redis.hdel(`users:${userId}`, "data");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private async addGameToRedis(game: Game) {
@@ -53,10 +70,19 @@ class GameManager {
     const gameObj = {
       game: JSON.stringify(game),
     };
-    await this.redis.hset(`game:${game.gameId}`, gameObj);
+    try {
+      await this.redis.hset(`game:${game.gameId}`, gameObj);
+    } catch (error) {
+      console.log(error);
+    }
   }
   private async getGame(gameId: string): Promise<Game | null> {
-    const game = await this.redis.hget(`game:${gameId}`, "game");
+    let game;
+    try {
+      game = await this.redis.hget(`game:${gameId}`, "game");
+    } catch (error) {
+      console.log(error);
+    }
     if (!game) {
       return null;
     }
