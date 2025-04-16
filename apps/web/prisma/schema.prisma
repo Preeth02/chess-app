@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String  
+  createdAt DateTime @default(now())
+
+  // For now I have commented it as this approach also works.
+  // gamesAsWhite Game[]       @relation("GamesAsWhite")
+  // gamesAsBlack Game[]       @relation("GamesAsBlack")
+
+  //this approach to make it future proof:
+  GamePlayer GamePlayer[]
+}
+
+model Game {
+  id         String       @id
+  userId1    String
+  userId2    String
+  // player1    User         @relation("GamesAsWhite", fields: [userId1], references: [id])
+  // player2    User         @relation("GamesAsBlack", fields: [userId2], references: [id])
+  result     String
+  createdAt  DateTime
+  moves      String[]
+  GamePlayer GamePlayer[]
+}
+
+enum Role {
+  white
+  black
+}
+
+model GamePlayer {
+  id String @id @default(uuid())
+
+  role Role
+
+  gameID String
+  userID String
+
+  user User @relation(fields: [userID], references: [id])
+  game Game @relation(fields: [gameID], references: [id])
+
+  @@unique([gameID, role])
+}
