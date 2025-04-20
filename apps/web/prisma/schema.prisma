@@ -15,18 +15,66 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String   @unique
-  password  String  
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  // For now I have commented it as this approach also works.
-  // gamesAsWhite Game[]       @relation("GamesAsWhite")
-  // gamesAsBlack Game[]       @relation("GamesAsBlack")
+  sessions Session[]
+  accounts Account[]
 
-  //this approach to make it future proof:
   GamePlayer GamePlayer[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("verification")
 }
 
 model Game {
@@ -39,6 +87,8 @@ model Game {
   createdAt  DateTime
   moves      String[]
   GamePlayer GamePlayer[]
+
+  @@map("game")
 }
 
 enum Role {
@@ -47,7 +97,7 @@ enum Role {
 }
 
 model GamePlayer {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   role Role
 
@@ -58,4 +108,6 @@ model GamePlayer {
   game Game @relation(fields: [gameID], references: [id])
 
   @@unique([gameID, role])
+  
+  @@map("gamePlayer")
 }
