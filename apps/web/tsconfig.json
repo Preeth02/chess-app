@@ -3,13 +3,17 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@lib/*":["lib/*"]
+      "@lib/*":["lib/*"],
+      "better-auth/*": ["node_modules/better-auth/*"]
     },
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    
   },
   "include": [
     "**/*.ts",

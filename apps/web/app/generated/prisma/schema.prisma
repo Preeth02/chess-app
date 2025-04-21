@@ -97,7 +97,7 @@ enum Role {
 }
 
 model GamePlayer {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   role Role
 

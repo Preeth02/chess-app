@@ -7,7 +7,7 @@ export const userNameValidation = z
   .regex(/^[a-zA-Z0-9_]+$/);
 
 export const signUpSchema = z.object({
-  username: userNameValidation,
+  name: userNameValidation,
   email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(8, "Password must be atleast 8 characters"),
 });
