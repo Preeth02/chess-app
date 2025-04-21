@@ -18,3 +18,11 @@ export const makeMoveSchema = z.object({
   type: z.literal("make_move"),
   payload: PayloadSchema,
 });
+
+export const gameSchema = z.object({
+  id: z.string(),
+  userId1: z.string(),
+  userId2: z.string(),
+  createdAt: z.date(),
+  result: z.string(),
+});

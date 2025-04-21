@@ -5851,24 +5851,18 @@ export namespace Prisma {
 
   export type GameMinAggregateOutputType = {
     id: string | null
-    userId1: string | null
-    userId2: string | null
     result: string | null
     createdAt: Date | null
   }
 
   export type GameMaxAggregateOutputType = {
     id: string | null
-    userId1: string | null
-    userId2: string | null
     result: string | null
     createdAt: Date | null
   }
 
   export type GameCountAggregateOutputType = {
     id: number
-    userId1: number
-    userId2: number
     result: number
     createdAt: number
     moves: number
@@ -5878,24 +5872,18 @@ export namespace Prisma {
 
   export type GameMinAggregateInputType = {
     id?: true
-    userId1?: true
-    userId2?: true
     result?: true
     createdAt?: true
   }
 
   export type GameMaxAggregateInputType = {
     id?: true
-    userId1?: true
-    userId2?: true
     result?: true
     createdAt?: true
   }
 
   export type GameCountAggregateInputType = {
     id?: true
-    userId1?: true
-    userId2?: true
     result?: true
     createdAt?: true
     moves?: true
@@ -5976,8 +5964,6 @@ export namespace Prisma {
 
   export type GameGroupByOutputType = {
     id: string
-    userId1: string
-    userId2: string
     result: string
     createdAt: Date
     moves: string[]
@@ -6002,8 +5988,6 @@ export namespace Prisma {
 
   export type GameSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId1?: boolean
-    userId2?: boolean
     result?: boolean
     createdAt?: boolean
     moves?: boolean
@@ -6013,8 +5997,6 @@ export namespace Prisma {
 
   export type GameSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId1?: boolean
-    userId2?: boolean
     result?: boolean
     createdAt?: boolean
     moves?: boolean
@@ -6022,8 +6004,6 @@ export namespace Prisma {
 
   export type GameSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId1?: boolean
-    userId2?: boolean
     result?: boolean
     createdAt?: boolean
     moves?: boolean
@@ -6031,14 +6011,12 @@ export namespace Prisma {
 
   export type GameSelectScalar = {
     id?: boolean
-    userId1?: boolean
-    userId2?: boolean
     result?: boolean
     createdAt?: boolean
     moves?: boolean
   }
 
-  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId1" | "userId2" | "result" | "createdAt" | "moves", ExtArgs["result"]["game"]>
+  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "result" | "createdAt" | "moves", ExtArgs["result"]["game"]>
   export type GameInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     GamePlayer?: boolean | Game$GamePlayerArgs<ExtArgs>
     _count?: boolean | GameCountOutputTypeDefaultArgs<ExtArgs>
@@ -6053,8 +6031,6 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      userId1: string
-      userId2: string
       result: string
       createdAt: Date
       moves: string[]
@@ -6483,8 +6459,6 @@ export namespace Prisma {
    */
   interface GameFieldRefs {
     readonly id: FieldRef<"Game", 'String'>
-    readonly userId1: FieldRef<"Game", 'String'>
-    readonly userId2: FieldRef<"Game", 'String'>
     readonly result: FieldRef<"Game", 'String'>
     readonly createdAt: FieldRef<"Game", 'DateTime'>
     readonly moves: FieldRef<"Game", 'String[]'>
@@ -8045,8 +8019,6 @@ export namespace Prisma {
 
   export const GameScalarFieldEnum: {
     id: 'id',
-    userId1: 'userId1',
-    userId2: 'userId2',
     result: 'result',
     createdAt: 'createdAt',
     moves: 'moves'
@@ -8458,8 +8430,6 @@ export namespace Prisma {
     OR?: GameWhereInput[]
     NOT?: GameWhereInput | GameWhereInput[]
     id?: StringFilter<"Game"> | string
-    userId1?: StringFilter<"Game"> | string
-    userId2?: StringFilter<"Game"> | string
     result?: StringFilter<"Game"> | string
     createdAt?: DateTimeFilter<"Game"> | Date | string
     moves?: StringNullableListFilter<"Game">
@@ -8468,8 +8438,6 @@ export namespace Prisma {
 
   export type GameOrderByWithRelationInput = {
     id?: SortOrder
-    userId1?: SortOrder
-    userId2?: SortOrder
     result?: SortOrder
     createdAt?: SortOrder
     moves?: SortOrder
@@ -8481,8 +8449,6 @@ export namespace Prisma {
     AND?: GameWhereInput | GameWhereInput[]
     OR?: GameWhereInput[]
     NOT?: GameWhereInput | GameWhereInput[]
-    userId1?: StringFilter<"Game"> | string
-    userId2?: StringFilter<"Game"> | string
     result?: StringFilter<"Game"> | string
     createdAt?: DateTimeFilter<"Game"> | Date | string
     moves?: StringNullableListFilter<"Game">
@@ -8491,8 +8457,6 @@ export namespace Prisma {
 
   export type GameOrderByWithAggregationInput = {
     id?: SortOrder
-    userId1?: SortOrder
-    userId2?: SortOrder
     result?: SortOrder
     createdAt?: SortOrder
     moves?: SortOrder
@@ -8506,8 +8470,6 @@ export namespace Prisma {
     OR?: GameScalarWhereWithAggregatesInput[]
     NOT?: GameScalarWhereWithAggregatesInput | GameScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Game"> | string
-    userId1?: StringWithAggregatesFilter<"Game"> | string
-    userId2?: StringWithAggregatesFilter<"Game"> | string
     result?: StringWithAggregatesFilter<"Game"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     moves?: StringNullableListFilter<"Game">
@@ -8901,8 +8863,6 @@ export namespace Prisma {
 
   export type GameCreateInput = {
     id: string
-    userId1: string
-    userId2: string
     result: string
     createdAt: Date | string
     moves?: GameCreatemovesInput | string[]
@@ -8911,8 +8871,6 @@ export namespace Prisma {
 
   export type GameUncheckedCreateInput = {
     id: string
-    userId1: string
-    userId2: string
     result: string
     createdAt: Date | string
     moves?: GameCreatemovesInput | string[]
@@ -8921,8 +8879,6 @@ export namespace Prisma {
 
   export type GameUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId1?: StringFieldUpdateOperationsInput | string
-    userId2?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moves?: GameUpdatemovesInput | string[]
@@ -8931,8 +8887,6 @@ export namespace Prisma {
 
   export type GameUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId1?: StringFieldUpdateOperationsInput | string
-    userId2?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moves?: GameUpdatemovesInput | string[]
@@ -8941,8 +8895,6 @@ export namespace Prisma {
 
   export type GameCreateManyInput = {
     id: string
-    userId1: string
-    userId2: string
     result: string
     createdAt: Date | string
     moves?: GameCreatemovesInput | string[]
@@ -8950,8 +8902,6 @@ export namespace Prisma {
 
   export type GameUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId1?: StringFieldUpdateOperationsInput | string
-    userId2?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moves?: GameUpdatemovesInput | string[]
@@ -8959,8 +8909,6 @@ export namespace Prisma {
 
   export type GameUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId1?: StringFieldUpdateOperationsInput | string
-    userId2?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moves?: GameUpdatemovesInput | string[]
@@ -9330,8 +9278,6 @@ export namespace Prisma {
 
   export type GameCountOrderByAggregateInput = {
     id?: SortOrder
-    userId1?: SortOrder
-    userId2?: SortOrder
     result?: SortOrder
     createdAt?: SortOrder
     moves?: SortOrder
@@ -9339,16 +9285,12 @@ export namespace Prisma {
 
   export type GameMaxOrderByAggregateInput = {
     id?: SortOrder
-    userId1?: SortOrder
-    userId2?: SortOrder
     result?: SortOrder
     createdAt?: SortOrder
   }
 
   export type GameMinOrderByAggregateInput = {
     id?: SortOrder
-    userId1?: SortOrder
-    userId2?: SortOrder
     result?: SortOrder
     createdAt?: SortOrder
   }
@@ -10202,8 +10144,6 @@ export namespace Prisma {
 
   export type GameCreateWithoutGamePlayerInput = {
     id: string
-    userId1: string
-    userId2: string
     result: string
     createdAt: Date | string
     moves?: GameCreatemovesInput | string[]
@@ -10211,8 +10151,6 @@ export namespace Prisma {
 
   export type GameUncheckedCreateWithoutGamePlayerInput = {
     id: string
-    userId1: string
-    userId2: string
     result: string
     createdAt: Date | string
     moves?: GameCreatemovesInput | string[]
@@ -10271,8 +10209,6 @@ export namespace Prisma {
 
   export type GameUpdateWithoutGamePlayerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId1?: StringFieldUpdateOperationsInput | string
-    userId2?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moves?: GameUpdatemovesInput | string[]
@@ -10280,8 +10216,6 @@ export namespace Prisma {
 
   export type GameUncheckedUpdateWithoutGamePlayerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId1?: StringFieldUpdateOperationsInput | string
-    userId2?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moves?: GameUpdatemovesInput | string[]

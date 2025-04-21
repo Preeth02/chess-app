@@ -165,8 +165,6 @@ exports.Prisma.VerificationScalarFieldEnum = {
 
 exports.Prisma.GameScalarFieldEnum = {
   id: 'id',
-  userId1: 'userId1',
-  userId2: 'userId2',
   result: 'result',
   createdAt: 'createdAt',
   moves: 'moves'

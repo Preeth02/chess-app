@@ -79,8 +79,8 @@ model Verification {
 
 model Game {
   id         String       @id
-  userId1    String
-  userId2    String
+  // userId1    String
+  // userId2    String
   // player1    User         @relation("GamesAsWhite", fields: [userId1], references: [id])
   // player2    User         @relation("GamesAsBlack", fields: [userId2], references: [id])
   result     String
