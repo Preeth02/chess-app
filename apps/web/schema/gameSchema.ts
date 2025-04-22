@@ -21,8 +21,9 @@ export const makeMoveSchema = z.object({
 
 export const gameSchema = z.object({
   id: z.string(),
-  userId1: z.string(),
-  userId2: z.string(),
   createdAt: z.date(),
   result: z.string(),
+  player1: z.string(),
+  player2: z.string(),
+  moves: z.array(z.string()),
 });
