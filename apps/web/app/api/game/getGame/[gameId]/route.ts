@@ -1,9 +1,9 @@
 import Apiresponse from "@lib/ApiResponse";
 import prisma from "@lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function GET(
-  req: NextResponse,
+  req: NextRequest,
   { params }: { params: { gameId: string } }
 ) {
   const gameId = params.gameId;
