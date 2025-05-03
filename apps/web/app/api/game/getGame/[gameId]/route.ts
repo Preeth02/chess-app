@@ -15,7 +15,14 @@ export async function GET(
     include: { game: true },
   });
   if (!game) {
-    return new Apiresponse(404, "No game with the following game id");
+    return new Apiresponse(
+      404,
+      "No game with the following game id"
+    ).successResponse();
   }
-  return new Apiresponse(200, "Game fetched successfully", game);
+  return new Apiresponse(
+    200,
+    "Game fetched successfully",
+    game
+  ).successResponse();
 }

@@ -12,10 +12,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
     "@types/node": "^22.13.14",
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "ioredis": "^5.6.0"
+    "cookie": "^1.0.2",
+    "cookie-parser": "^1.4.7",
+    "ioredis": "^5.6.0",
+    "jose": "^6.0.10",
+    "jose-node-cjs-runtime": "^5.10.0"
   }
 }

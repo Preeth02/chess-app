@@ -1,6 +1,6 @@
 import Apiresponse from "@lib/ApiResponse";
 import prisma from "@lib/prisma";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
@@ -8,7 +8,10 @@ export async function GET(
 ) {
   const username = params.username;
   if (username.length < 2) {
-    return new Apiresponse(401, "Please provide a valid username");
+    return new Apiresponse(
+      401,
+      "Please provide a valid username"
+    ).successResponse();
   }
   const user = await prisma.user.findFirst({
     where: { name: username },
@@ -18,7 +21,10 @@ export async function GET(
     },
   });
   if (!user) {
-    return new Apiresponse(404, "User with the following name is not found");
+    return new Apiresponse(
+      404,
+      "User with the following name is not found"
+    ).successResponse();
   }
   const lastGameId = await req.json();
   // const userGames = await prisma.gamePlayer.findMany({
@@ -45,6 +51,6 @@ export async function GET(
     return new Apiresponse(
       401,
       "Something went wrong while fetching all the games of the user"
-    );
+    ).successResponse();
   }
 }

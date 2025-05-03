@@ -238,6 +238,8 @@ class Game {
         },
       })
     );
+    this.result = result;
+    // const uploadToDB
     return;
   }
 }

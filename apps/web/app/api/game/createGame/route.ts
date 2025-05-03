@@ -41,5 +41,9 @@ export async function POST(req: NextRequest) {
       "Something went wrong while creating the game in the database"
     ).successResponse();
   }
-  return new Apiresponse(200, "Game has been created successfully", createGame);
+  return new Apiresponse(
+    200,
+    "Game has been created successfully",
+    createGame
+  ).successResponse();
 }
